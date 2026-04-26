@@ -32,3 +32,37 @@ button {
   display: flex;
   flex-direction: column;
 }
+
+.health-section{
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 90px;
+}
+
+.border-health-bar{
+  width: 100%;
+  border: 1px solid black;
+  height: 40px;
+}
+
+.health-gap{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-health-bar{
+  display: flex;
+  background-color: red;
+  width: var(--hero-health);
+  height: 100%;
+}
+
+.monster-health-bar{
+  display: flex;
+  background-color: orange;
+  width: var(--monster-health);
+  height: 100%;
+}
