@@ -1,3 +1,9 @@
+/* IT IS AN ID SELECTOR, NOT CLASS */
+#battle-logs{
+  max-height: 100px;
+  overflow-y: auto;
+}
+
 html,
 body {
   height: 100%;
@@ -65,4 +71,12 @@ button {
   background-color: orange;
   width: var(--monster-health);
   height: 100%;
+}
+
+.logs-section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  color: red;
 }
