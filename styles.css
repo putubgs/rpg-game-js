@@ -74,9 +74,19 @@ button {
 }
 
 .logs-section {
-  margin-top: 20px;
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
   text-align: center;
   color: red;
+}
+
+.result-section{
+  padding-bottom: 25px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-weight: bold;
+  color: darkorange;
 }

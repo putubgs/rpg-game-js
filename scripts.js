@@ -5,6 +5,7 @@ const attackBtn = document.getElementById("attack-button");
 const ultiBtn = document.getElementById("ultimate-button");
 const healBtn = document.getElementById("heal-button");
 const battleLogs = document.getElementById("battle-logs");
+const battleResult = document.getElementById("battle-result");
 
 const logs = [];
 
@@ -35,28 +36,67 @@ const attack = () => {
   console.log(`Monster's health remaining ${monsterHealth.innerHTML}`);
   console.log(`Hero's health remaning ${heroHealth}`);
 
-  logsGenerator(monsterOpt, "attack", lolAttack.monsterDmg, lolAttack.heroDmg)
+  logsGenerator(monsterOpt, "attack", lolAttack.monsterDmg, lolAttack.heroDmg);
 
+  resultGenerator(monsterHealth, heroHealth);
+};
+
+const resultGenerator = (monsterHealth, heroHealth) => {
   if (winnerSelector(monsterHealth, heroHealth) == "hero") {
     console.log("the monster is dead");
     attackBtn.disabled = true;
+    ultiBtn.disabled = true;
+    healBtn.disabled = true;
+    battleResult.innerHTML = "HERO WIN";
   }
-  if (
-    winnerSelector(monsterHealth, heroHealth) == "monster"
-  ) {
+  if (winnerSelector(monsterHealth, heroHealth) == "monster") {
     console.log("the hero is dead");
     attackBtn.disabled = true;
+    ultiBtn.disabled = true;
+    healBtn.disabled = true;
+    battleResult.innerHTML = "MONSTER WIN";
   }
 };
 
 const ultimate = () => {
-  console.log("ultimate attack");
+  let lolAttack = generateDamage(monsterOpt, "ultimate");
+
+  heroHealth = deathDetector(heroHealth - lolAttack.monsterDmg);
+  heroHealthBox.style.setProperty("--hero-health", heroHealth + "%");
+
+  monsterHealth = deathDetector(monsterHealth - lolAttack.heroDmg);
+  monsterHealthBox.style.setProperty("--monster-health", monsterHealth + "%");
+
+  logsGenerator(
+    monsterOpt,
+    "ultimate",
+    lolAttack.monsterDmg,
+    lolAttack.heroDmg,
+  );
+
+  resultGenerator(monsterHealth, heroHealth);
 };
 
 const heal = () => {
-  console.log("user healed");
-};
+  const healAmount = Math.round(Math.random() * 10 + 10);
 
+  heroHealth = Math.min(heroHealth + healAmount, 100);
+  heroHealthBox.style.setProperty("--hero-health", heroHealth + "%");
+
+  let monsterDmg = Math.round(Math.random() * 10 + 5);
+  heroHealth = deathDetector(heroHealth - monsterDmg);
+  heroHealthBox.style.setProperty("--hero-health", heroHealth + "%");
+
+  let healLogMsg = `HERO: healed ${healAmount} HP`;
+  let dmgLogMsg = `HERO: received ${monsterDmg} damage from monster`;
+
+  logs.push(healLogMsg);
+  logs.push(dmgLogMsg);
+
+  renderLogs();
+
+  resultGenerator(monsterHealth, heroHealth);
+};
 
 // FUNCTION TO DETECT THE WINNER BASED ON CURRENT HP
 const winnerSelector = (monsterHP, heroHP) => {
@@ -109,23 +149,23 @@ const logsGenerator = (monsterAttOpt, heroAttOpt, monsterDmg, heroDmg) => {
 
   battleLogs.innerHTML = "user attacked";
 
-  let monsterLogMsg = `MONSTER: received ${heroDmg} damage from ${heroAttOpt == "attack" ? "basic attack" : heroAttOpt}`
-  let heroLogMsg = `HERO: received ${monsterDmg} damage from ${monsterAttOpt == "attack" ? "basic attack" : monsterAttOpt}`
+  let monsterLogMsg = `MONSTER: received ${heroDmg} damage from ${heroAttOpt == "attack" ? "basic attack" : heroAttOpt}`;
+  let heroLogMsg = `HERO: received ${monsterDmg} damage from ${monsterAttOpt == "attack" ? "basic attack" : monsterAttOpt}`;
 
   battleLogs.innerHTML += `<p>${monsterLogMsg}</p>`;
   battleLogs.innerHTML += `<p>${heroLogMsg}</p>`;
 
   logs.push(monsterLogMsg);
-  logs.push(heroLogMsg)
+  logs.push(heroLogMsg);
 
-  renderLogs()
-}
+  renderLogs();
+};
 
-const renderLogs = () =>{
-  battleLogs.innerHTML = logs.map(log => `<p>${log}</p>`).join("")
+const renderLogs = () => {
+  battleLogs.innerHTML = logs.map((log) => `<p>${log}</p>`).join("");
 
   battleLogs.scrollTop = battleLogs.scrollHeight;
-}
+};
 
 attackBtn.addEventListener("click", attack);
 ultiBtn.addEventListener("click", ultimate);
